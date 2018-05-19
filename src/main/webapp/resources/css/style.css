@@ -1,0 +1,281 @@
+.error {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+.msg {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+#login-box {
+	width: 400px;
+	padding: 45px;
+	margin: 50px auto;
+	background: #fff;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border: 1px solid #000;
+}
+.floatleft {
+	float: left;
+}
+.floatright {
+	float: right;
+}
+.btn {
+	margin-top: 10px;
+	/* width: 30%; */
+	/* margin-left: 185px; */
+	background-color: grey;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.clear {
+	clear: both;
+}
+.logout-btn {
+	margin-top: 10px;
+    margin-right: 10px;
+    width: 8%;
+}
+a {
+	color: #0B99B3;
+	text-decoration:none;
+}
+.centerbtn{
+	margin-left: 250px;
+}
+.width95{
+	width: 95px;
+}
+.width150{
+	width: 150px;
+}
+.marginright{
+	margin-right: 20px;
+}
+.marginleft{
+	margin-left: 35px;
+}
+.marginright115{
+	margin-right: 115px;
+}
+.oneline{
+	width: 80px;
+	margin-top: 16px;
+}
+.errorMsg{
+	color: red;
+}
+.errorCars{
+	color: red;
+}
+.errorPeople{
+	color: red;
+}
+.marginleft10{
+	margin-left: 10px;
+}
+.width100{
+	width: 100%;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    height: 20%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+table.overview {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 716px;
+    border: 2px solid black;
+    margin: 0 auto;
+}
+
+table.overview tbody td {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+table.overview thead th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+
+table.scroll {
+    width: 716px; /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+table.scroll tbody,
+table.scroll thead tr { display: block; }
+
+table.scroll tbody {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+img {
+	cursor: pointer;
+}
+
+table.scroll tbody td{
+	padding: 15px;
+    width: 207px;
+    border-right: 1px solid black;
+}
+
+table.scroll thead th{
+	padding: 15px;
+    border-right: 1px solid black;
+    text-align: center;
+}
+
+table.scroll tbody td:last-child, thead th:last-child {
+    border-right: none !important;
+}
+
+.sidenav {
+    height: 16%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 30px;
+    right: 10px;
+    border:1px solid black;
+    border-radius: 5px;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 13px;
+    text-decoration: none;
+    color: #111;
+    display: block;
+    transition: 0.3s;
+}
+
+#navigation {
+	margin-left: 20px;	
+}
+
+#navigation a{
+	font-weight: bold;	
+	cursor: pointer;
+}
+
+#navigation p{
+	font-weight: bold;	
+}
+.inline {
+	display:inline;
+}
+
+body {
+	font-family: Arial; 
+}
+
+.topnav {
+    overflow: hidden;
+    background-color: #375e99;
+    text-align: center;
+    height: 100px;
+}
+
+/* Style the topnav links */
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 35px 45px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+    background-color: #4474bb;
+    cursor: pointer;
+    font-size: 24px;
+    height: 100px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 4px;}
+  .sidenav a {font-size: 10px;}
+}
+
+.parent { height: 400px; width: 400px; position: relative; margin: 50px auto;}
+.wrapper { position: relative}
+.content { height: 200px; width: 200px; margin:0 auto; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.supClass {
+	border-radius: 10px;
+    background: lightgrey;
+    margin-left: 5px;
+    padding: 5px 10px 5px 10px;
+}
