@@ -2,9 +2,11 @@ package com.humansolutions.common;
 
 public class HumanSolutionsURLConstants {
 	
+	public static final String SYSTEM_LOGIN = "/system_login.htm";
+	
 	public static final String ROOT_LOGIN = "/";
 	
-	public static final String WELCOME = "/welcome**";
+	public static final String WELCOME = "/welcome.htm";
 
 	public static final String LOGIN = "/login";
 	
@@ -17,5 +19,7 @@ public class HumanSolutionsURLConstants {
 	public static final String INSTRUCTIONS = "/instructions.htm";
 	
 	public static final String TRANSCRIBE_TEXTS = "/transcribe_texts.htm";
+	
+	public static final String SYSTEM_LOGOUT = "/system_logout.htm";
 	
 }

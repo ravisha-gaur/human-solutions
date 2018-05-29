@@ -22,9 +22,8 @@ import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +45,18 @@ public class MainController {
 	@Resource(name = "humanSolutionsService")
 	private HumanSolutionsService humanSolutionsService;
 	
+	@RequestMapping(value = HumanSolutionsURLConstants.SYSTEM_LOGIN, method = RequestMethod.POST)
+	public String systemLogin(HttpServletRequest request, @RequestParam(value = "username") String username, @RequestParam(value = "password") String password) {
+		int count = humanSolutionsService.checkLoginCredentials(username.trim(), password);
+		if(count == 1){
+			HttpSession session = request.getSession();  
+			session.setAttribute("username", username.trim());
+			session.setAttribute("password", password);
+			return HumanSolutionsStringConstants.REDIRECT + HumanSolutionsURLConstants.WELCOME;
+		}
+		else
+			return HumanSolutionsStringConstants.REDIRECT + HumanSolutionsURLConstants.LOGIN + "?error=error";
+	}
 
 	/**
 	 * This method returns the welcome page
@@ -53,8 +64,9 @@ public class MainController {
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.WELCOME, method = RequestMethod.GET)
 	public ModelAndView welcomePage(HttpServletRequest request) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
+		
+		HttpSession session = request.getSession();
+		String userName = (String) session.getAttribute("username");
 		UserDom user = humanSolutionsService.getUserDetails(userName);
 		ModelAndView model = new ModelAndView();
 		
@@ -157,7 +169,6 @@ public class MainController {
 		
 		List<UserDom> earningsList = humanSolutionsService.getEarningsPerSession(userName);
 		
-		
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -219,17 +230,36 @@ public class MainController {
 			@RequestParam(value = "logout", required = false) String logout) {
 
 		ModelAndView model = new ModelAndView();
-		if (error != null && error.equals(error)) {
+		if (error != null && error.equals("error")) {
 			model.addObject("error", "Invalid username or password!");
 		}
 
-		if (logout != null && logout.equals(logout)) {
+		if (logout != null && logout.equals("logout")) {
 			model.addObject("msg", "You've been logged out successfully.");
 		}
 		model.setViewName(HumanSolutionsJSPConstants.LOGIN);
 
 		return model;
 
+	}
+	
+	@RequestMapping(value = HumanSolutionsURLConstants.SYSTEM_LOGOUT)
+	public String logout(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String userName = (String) session.getAttribute("username");
+		int sessionId = 0;
+		if(null != request.getParameter("sessionId")) 
+			sessionId = Integer.parseInt(request.getParameter("sessionId"));
+		
+		List<Integer> sessionImageIds = humanSolutionsService.getSessionImageIds(userName, sessionId);
+		
+		if(sessionImageIds.size() != 0 && sessionId != 0) {
+			humanSolutionsService.updateSessionStatus(userName, sessionId, "Incomplete");
+		}
+			
+		session.invalidate();
+		// Redirect user to the home page
+		return HumanSolutionsStringConstants.REDIRECT + HumanSolutionsURLConstants.LOGIN + "?logout=logout";
 	}
 	
 
@@ -283,9 +313,10 @@ public class MainController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.OVERVIEW, method = RequestMethod.GET)
-	public ModelAndView overview(@RequestParam(value = "imageId", required = false) Integer imageId, @RequestParam(value = "sessionId") Integer sessionId){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
+	public ModelAndView overview(HttpServletRequest request, @RequestParam(value = "imageId", required = false) Integer imageId, @RequestParam(value = "sessionId") Integer sessionId){
+
+		HttpSession session = request.getSession();
+		String userName = (String) session.getAttribute("username");
 		UserDom user = humanSolutionsService.getUserDetails(userName);
 		List<UserDom> earningsList = getEarningsList(userName, user);
 		ModelAndView mav = new ModelAndView(HumanSolutionsJSPConstants.OVERVIEW);
@@ -367,11 +398,11 @@ public class MainController {
 		Collections.shuffle(hardlyReadableImageIds);
 		Collections.shuffle(unreadableImageIds);
 		if(readableImageIds.size() > 1)
-			readableImageIds = readableImageIds.subList(0, 1);
+			readableImageIds = readableImageIds.subList(0, 6);
 		if(hardlyReadableImageIds.size() > 1)
-			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 1);
+			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 2);
 		if(unreadableImageIds.size() > 1)
-			unreadableImageIds = unreadableImageIds.subList(0, 1);
+			unreadableImageIds = unreadableImageIds.subList(0, 2);
 		
 		
 		finalImageIdsForSession.addAll(readableImageIds);
@@ -391,8 +422,8 @@ public class MainController {
 	public ModelAndView transcribeText(@RequestParam(value = "sessionId", required = false) Integer sessionId, @RequestParam(value = "imageId", required = false) 
 			Integer imageId, HttpServletRequest request) {
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
+		HttpSession session = request.getSession();
+		String userName = (String) session.getAttribute("username");
 		
 		request.getSession().setAttribute("count", 2);
 		ModelAndView modelAndView = new ModelAndView();
@@ -415,10 +446,11 @@ public class MainController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.TRANSCRIBE_TEXTS, method = RequestMethod.POST)
-	public String saveTranscribedText(@ModelAttribute("taskDetails") TaskDetailsDom taskDetailsDom ,@RequestParam(value = "sessionId", required = false) Integer sessionId, 
+	public String saveTranscribedText(HttpServletRequest request, @ModelAttribute("taskDetails") TaskDetailsDom taskDetailsDom ,@RequestParam(value = "sessionId", required = false) Integer sessionId, 
 			@RequestParam(value = "imageId", required = false) Integer imageId){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
+		
+		HttpSession session = request.getSession();
+		String userName = (String) session.getAttribute("username");
 		
 		String solutionText = humanSolutionsService.getSolutionTranscribedText(imageId);
 		

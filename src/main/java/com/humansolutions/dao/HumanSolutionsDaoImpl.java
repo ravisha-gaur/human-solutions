@@ -213,10 +213,12 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		int userId = jdbcTemplate.queryForObject(queryForUserId, new Object[] { userName }, Integer.class);
 		
-		if(userId % listOfTreatments.size() == 0)
+		//For the pilot -> only Baseline treatment i.e. no moral reminders
+		
+		/*if(userId % listOfTreatments.size() == 0)
 			treatmentMsgType = listOfTreatments.get(4);
 		else
-			treatmentMsgType = listOfTreatments.get((userId % listOfTreatments.size()) - 1);
+			treatmentMsgType = listOfTreatments.get((userId % listOfTreatments.size()) - 1);*/
 			
 		
 		String query = "update user set is_first_login = 1, start_date = ?, treatment_msg_type = ? where username = ?";
@@ -377,6 +379,18 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId });
 		
+	}
+
+	@Override
+	public int checkLoginCredentials(String username, String password) {
+		
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		String query = "select count(*) from user where username like ? and password like ?";
+		
+		int count = jdbcTemplate.queryForObject(query, new Object[]{username, password}, Integer.class);
+		
+		return count;
 	}
 	
 }

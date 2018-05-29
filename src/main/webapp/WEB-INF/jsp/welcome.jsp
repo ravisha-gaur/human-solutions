@@ -77,7 +77,7 @@ $(document).ready(function () {
 </head>
 <body>
 <div class="topnav">
-	<c:url value="/j_spring_security_logout?sessionId=${sessionId}" var="logoutUrl" />
+	<c:url value="/system_logout.htm?sessionId=${sessionId}" var="logoutUrl" />
 	<form action="${logoutUrl}" method="post" id="logoutForm">
    <a href="javascript:;" onclick="document.getElementById('logoutForm').submit();" style="float:right">Logout</a>
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -110,7 +110,7 @@ Please login after 0.00GMT to find new tasks.
 <div class="clear"></div>
 <div style="text-align: center;">
 	<input class="btn" name="submit" type="button" value="Proceed" id="myBtn" style="margin-left: 270px;"/>
-	<input class="btn" name="submit" type="button" value="Proceed" id="videoBtn" onclick="location.href='instructions.htm?sessionId=${sessionId}';" style="margin-left: 125px; display:none;width: 20%;"/>
+	<input class="btn" name="submit" type="button" value="Proceed" id="videoBtn" onclick="location.href='instructions.htm?sessionId=${sessionId}';" style="position: relative; left: 37%; display:none;width: 20%;"/>
 </div>
 </div>
 <%-- <div id="myModal" class="modal">

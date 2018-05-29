@@ -30,7 +30,7 @@ $(document).ready(function(){
 	<a onclick="location.href='welcome.htm';">Welcome</a>
 	<a onclick="location.href='instructions.htm?sessionId=${sessionId}';">Instructions</a>
 	<a onclick="location.href='overview.htm?sessionId=${sessionId}';">Overview</a>
-	<c:url value="/j_spring_security_logout?sessionId=${sessionId}" var="logoutUrl" />
+	<c:url value="/system_logout.htm?sessionId=${sessionId}" var="logoutUrl" />
 	<form action="${logoutUrl}" method="post" id="logoutForm">
    <a href="javascript:;" onclick="document.getElementById('logoutForm').submit();" style="float:right">Logout</a>
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

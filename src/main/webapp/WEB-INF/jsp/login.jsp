@@ -21,18 +21,18 @@
 			<div class="msg">${msg}</div>
 		</c:if>
 
-		<form name='loginForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
+		<form name='loginForm' action="<c:url value='/system_login.htm' />" method='POST'>
 			<table>
 				<tr>
 					<td style="width: 40%;">Username :</td>
-					<td><input type='text' name='username' /></td>
+					<td><input type='text' name='username' required="true" /></td>
 				</tr>
 				<tr><td></td></tr>
 				<tr><td></td></tr>
 				<tr><td></td></tr>
 				<tr>
 					<td style="width: 40%;">Password 	:</td>
-					<td><input type='password' name='password' /></td>
+					<td><input type='password' name='password' required="true" /></td>
 				</tr>
 			</table>
 			<input class="btn" name="submit" type="submit" value="Submit" style="margin-left: 125px; margin-top: 20px;"/>

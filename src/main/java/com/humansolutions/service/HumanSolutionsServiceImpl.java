@@ -119,4 +119,9 @@ public class HumanSolutionsServiceImpl implements HumanSolutionsService{
 		humanSolutionsDao.updateSessionStatus(userName, sessionId, sessionStatus);
 	}
 
+	@Override
+	public int checkLoginCredentials(String username, String password) {
+		return humanSolutionsDao.checkLoginCredentials(username, password);
+	}
+
 }
