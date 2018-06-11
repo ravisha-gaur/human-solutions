@@ -13,56 +13,69 @@
 <script type="text/javascript">
 $(document).ready(function () {
 	
-	var tasksNotAvailable = "${tasksNotAvailable}"
-	
-	var treatmentMsgType = "${treatmentMsgType}"
-		
-	var sessionNumber = ${sessionNumber};
-	if(sessionNumber == 1){
+	var tasksNotAvailable = "${tasksNotAvailable}";
+
+	var endContract = "${endContract}";
+
+	var lastSession = "${lastSession}";
+
+	if(endContract == "true") {
+		$("#end_contract").css('display','block');
+		$("#session1").css('display','none');
 		$("#session2").css('display','none');
-		if(treatmentMsgType === "Baseline"){
-			$("#videoBtn").css('display','block');
-			$("#myBtn").css('display','none');
-		}
-		else {
-			$("#videoBtn").css('display','none');
-			$("#myBtn").css('display','block');
-		}
+		$("#videoBtn").css('display','none');
+		$("#myBtn").css('display','none');
 	}
-	 else if(sessionNumber == 4){
-		$("#session1").css('display','none');
-		$("#login-box").css('width',400);
-		if(treatmentMsgType === "Baseline" || treatmentMsgType === "Msg_once"){
-			$("#videoBtn").css('display','block');
-			$("#myBtn").css('display','none');
+	else {
+		var treatmentMsgType = "${treatmentMsgType}"
+			
+		var sessionNumber = ${sessionNumber};
+		if(sessionNumber == 1){
+			$("#session2").css('display','none');
+			if(treatmentMsgType === "Baseline"){
+				$("#videoBtn").css('display','block');
+				$("#myBtn").css('display','none');
+			}
+			else {
+				$("#videoBtn").css('display','none');
+				$("#myBtn").css('display','block');
+			}
 		}
-		else {
-			$("#videoBtn").css('display','none');
-			$("#myBtn").css('display','block');
+		 else if(sessionNumber == 4){
+			$("#session1").css('display','none');
+			//$("#login-box").css('width',400);
+			if(treatmentMsgType === "Baseline" || treatmentMsgType === "Msg_once"){
+				$("#videoBtn").css('display','block');
+				$("#myBtn").css('display','none');
+			}
+			else {
+				$("#videoBtn").css('display','none');
+				$("#myBtn").css('display','block');
+			}
 		}
+		else{
+			$("#session1").css('display','none');
+			//$("#login-box").css('width',400);
+			if(treatmentMsgType === "Baseline" || treatmentMsgType === "Msg_once" || treatmentMsgType === "Msg_low"){
+				$("#videoBtn").css('display','block');
+				$("#myBtn").css('display','none');
+			}
+			else {
+				$("#videoBtn").css('display','none');
+				$("#myBtn").css('display','block');
+			}
+		}
+		
+		$('#myBtn').click(function() {
+			 $("#myModal").css("display","block");
+			 $("#popUpMsg").css("display","block");
+		});
+		
+		
+		$(".close").click(function() {
+			 $("#myModal").css("display","none");
+		});
 	}
-	else{
-		$("#session1").css('display','none');
-		$("#login-box").css('width',400);
-		if(treatmentMsgType === "Baseline" || treatmentMsgType === "Msg_once" || treatmentMsgType === "Msg_low"){
-			$("#videoBtn").css('display','block');
-			$("#myBtn").css('display','none');
-		}
-		else {
-			$("#videoBtn").css('display','none');
-			$("#myBtn").css('display','block');
-		}
-	}
-	
-	$('#myBtn').click(function() {
-		 $("#myModal").css("display","block");
-		 $("#popUpMsg").css("display","block");
-	});
-	
-	
-	$(".close").click(function() {
-		 $("#myModal").css("display","none");
-	});
 	
 	if(tasksNotAvailable == "true") {
 		$("#session1").css('display','none');
@@ -70,6 +83,14 @@ $(document).ready(function () {
 		$("#videoBtn").css('display','none');
 		$("#myBtn").css('display','none');
 		$("#tasksNotAvailable").css('display','block');
+	}
+
+	if(lastSession == "true") {
+		$("#last_session").css('display','block');
+		$("#session1").css('display','none');
+		$("#session2").css('display','none');
+		$("#videoBtn").css('display','none');
+		$("#myBtn").css('display','none');
 	}
 });
 
@@ -102,6 +123,12 @@ Thank you for your work in yesterday's session. So far you have earned $ ${earni
 Please complete the work until 20:00 GMT.
 If you need to review the instructions, please <a href="instructions.htm?sessionId=${sessionId}">click here. </a>
 </p>
+<p id="end_contract" style="display:none;">
+Since you did not complete your assigned tasks yesterday, we have cancelled the contract as stated in the description of the task.
+</p>
+<p id="last_session" style="display:none;">
+Thank you for your work. You have completed all seven batches. We will release your payment of $35 during the next day.
+</p>
 <p id="tasksNotAvailable" style="display: none;">
 Thank you for logging in. At the moment, there are no tasks available for you. 
 Please login after 0.00GMT to find new tasks.
@@ -110,7 +137,7 @@ Please login after 0.00GMT to find new tasks.
 <div class="clear"></div>
 <div style="text-align: center;">
 	<input class="btn" name="submit" type="button" value="Proceed" id="myBtn" style="margin-left: 270px;"/>
-	<input class="btn" name="submit" type="button" value="Proceed" id="videoBtn" onclick="location.href='instructions.htm?sessionId=${sessionId}';" style="position: relative; left: 37%; display:none;width: 20%;"/>
+	<input class="btn" name="submit" type="button" value="Proceed" id="videoBtn" onclick="location.href='instructions.htm?sessionId=${sessionId}';" style="position: relative; left: 37%; display:none;"/>
 </div>
 </div>
 <%-- <div id="myModal" class="modal">

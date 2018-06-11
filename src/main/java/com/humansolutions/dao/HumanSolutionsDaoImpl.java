@@ -175,11 +175,22 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 	public void saveTranscribedTextAndScoreObtained(UserDom user, TaskDetailsDom taskDetailsDom) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String query = "insert into transcribed_text_and_score_details values(?, ?, ?, ?, ?, ?)";
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.HOUR, 1);
+	    DateFormat gmtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	    TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+	    gmtFormat.setTimeZone(gmtTime);
+	    
+	    String dateString = gmtFormat.format(calendar.getTime());	
 		
 		try{
+			Date sessionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
+			
+			String query = "insert into transcribed_text_and_score_details values(?, ?, ?, ?, ?, ?, ?)";
 			jdbcTemplate.update(query, new Object[]{user.getUsername(), user.getSessionNumber(), user.getImageId(), 
-												taskDetailsDom.getTranscribedText(), taskDetailsDom.getAccuracyScore(), taskDetailsDom.getReadable()});
+												taskDetailsDom.getTranscribedText(), taskDetailsDom.getAccuracyScore(), taskDetailsDom.getReadable(), sessionDate});
 		}
 		
 		catch(Exception e) {
@@ -240,10 +251,10 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 			e.printStackTrace();
 		}
 		
-		String insertEarningDetails = "insert into earnings values(?, ?, 0, 'Incomplete')";
+		String insertEarningDetails = "insert into earnings values(?, ?, 0, 'Incomplete', ?)";
 		
 		for(int i = 1; i < 8; i++){
-			jdbcTemplate.update(insertEarningDetails, new Object[]{ userName, i });
+			jdbcTemplate.update(insertEarningDetails, new Object[]{ userName, i, new Date() });
 		}
 		
 	}
@@ -375,9 +386,24 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String query = "update earnings set session_status = ? where username = ? and session_number = ?";
-		
-		jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId });
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.HOUR, 1);
+	    DateFormat gmtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	    TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+	    gmtFormat.setTimeZone(gmtTime);
+	    
+	    String dateString = gmtFormat.format(calendar.getTime());
+	    
+	    String query = "update earnings set session_status = ? where username = ? and session_number = ? and date = ?";
+	    
+		try {
+			Date sessionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
+			jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId, sessionDate });
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

@@ -26,8 +26,10 @@ http://www.springframework.org/schema/jee/spring-jee-3.2.xsd">
 	<bean name="dataSource" id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/human_behavior" /> -->
 		<property name="url" value="jdbc:mysql://18.217.155.170:3306/human_behavior" />
 		<property name="username" value="root" />
+		<!-- <property name="password" value="root" /> -->
 		<property name="password" value="password" />
 	</bean>
 

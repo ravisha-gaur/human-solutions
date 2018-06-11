@@ -97,8 +97,13 @@ public class MainController {
 	    		List<UserDom> earningsList = getEarningsList(userName, user);
 	    		int i = 0;
 	    		
+	    		boolean endContract = false;
 	    		for (UserDom earningDetails : earningsList) {
 	    			int sessionNumber = earningDetails.getSessionNumber();
+	    			if(earningDetails.getDiffInDays() > 0 && earningDetails.getSessionStatus().equals("Incomplete")) {
+	    				model.addObject("endContract", "true");
+	    				endContract = true;
+	    			}
 	    			if(earningDetails.getDiffInDays() > 0 && earningDetails.getSessionStatus().equals("Pending Approval")) {
 	    				humanSolutionsService.updateSessionStatus(userName, sessionNumber, "Approved");
 	    				earningsList.get(i).setSessionStatus("Approved");
@@ -121,6 +126,10 @@ public class MainController {
 	    			user.setTreatmentMsg(HumanSolutionsStringConstants.BASELINE);
 	    		if(treatmentMsgType.equalsIgnoreCase("monitoring"))
 	    			user.setTreatmentMsg(HumanSolutionsStringConstants.MONITORING_MSG);
+	    		
+	    		if(sessionNumber == 7 && !endContract) {
+	    			model.addObject("lastSession", "true");
+	    		}
 	    		
 	    		// Popup messages for session 1
 	    		if(sessionNumber == 1){
