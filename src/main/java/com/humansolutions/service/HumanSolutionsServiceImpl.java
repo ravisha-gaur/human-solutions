@@ -124,4 +124,9 @@ public class HumanSolutionsServiceImpl implements HumanSolutionsService{
 		return humanSolutionsDao.checkLoginCredentials(username, password);
 	}
 
+	@Override
+	public void setTaskEndFlag(String userName) {
+		humanSolutionsDao.setTaskEndFlag(userName);
+	}
+
 }

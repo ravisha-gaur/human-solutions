@@ -80,6 +80,7 @@ function resetZoom(){
 }
 
 $(document).ready(function () {
+	
 	resetW = 480;
 	resetH = 670;
 	
@@ -121,13 +122,6 @@ $(document).ready(function () {
     	            $('html, body').animate({scrollTop:$('#myBtn').position().top}, 'slow');
     	        }
     	    });
-	});
-
-$(window).on("navigate", function (event, data) {
-	  var direction = data.state.direction;
-	  if (direction == 'back') {
-	    window.location.href = 'your link with parameters';
-	  }
 	});
 	
 </script>

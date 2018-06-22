@@ -9,6 +9,13 @@
 <link rel="icon" href="/resources/images/favicon.ico?" type="image/x-icon">
 <link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
 <script src="<c:url value="/resources/js/jquery.1.10.2.min.js" />"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+	$('#backToTask').click( function () {
+	  window.location = document.referrer;
+	});
+});
+</script>
 </head>
 <body>
 <div class="topnav">
@@ -31,21 +38,19 @@
 <h1>Instructions</h1>
 <p>
 1.	For each image, you will first need to determine whether it is readable or not.<br>
-2.	It is possible that some of the images are not readable. <br>
-	&nbsp; &nbsp; &nbsp;<u>Reporting those as unreadable is acceptable and will not reduce your payment.</u><br>
-3.	If you report the image as readable, you will need to transcribe the text.<br>
-4.	Use the following rules for non-standard characters:<br>
-	&nbsp; &nbsp;&nbsp; &nbsp;Transcribe ä as ae, Ä as Ae<br>
-	&nbsp; &nbsp;&nbsp; &nbsp;Transcribe ö as oe, Ö as Oe<br>
-	&nbsp; &nbsp;&nbsp; &nbsp;Transcribe ü as ue, Ü as Ue<br>
-	&nbsp; &nbsp;&nbsp; &nbsp;Transcribe ß as ss<br>
-5.	Use a single "-" for both hyphens and dashes.<br>
-6.	Do NOT transcribe page numbers.<br>
-7.	Do NOT preserve the stanzas as you transcribe. <br>
+2.	It is possible that some of the images are not readable. <u>Reporting those as unreadable is acceptable and will NOT reduce your payment.</u><br>
+3.	If you report the image as readable, you will need to transcribe the text. <br>
+4.	Please transcribe all words as running text including the title and notes. Do NOT preserve the stanzas as you transcribe.<Br>
+5.	Do NOT transcribe page numbers.<br>
+6.	Use the following rules for non-standard characters:<br>
+	<span style="margin-left: 30px;">o	Transcribe ä as ae, Ä as Ae </span><br>
+	<span style="margin-left: 30px;">o	Transcribe ö as oe, Ö as Oe </span><br>
+	<span style="margin-left: 30px;">o	Transcribe ü as ue, Ü as Ue </span><br>
+	<span style="margin-left: 30px;">o	Transcribe ß as ss </span><br>
+7.	Use a single "-" for both hyphens and dashes. <br>
 8.	If you cannot read some characters, replace them with an underscore _.<br>
-9.	Press 'submit' after you finished transcribing.<br>
-<br><br>
-If you need to review the information, you can click on Instructions in the top menu. <br><br>
+9.	Press "Submit" after you finished transcribing.<br><br>
+If you need to review the information, you can click on "Instructions" in the top menu. 
 <br>
 
 </p>
@@ -55,7 +60,7 @@ If you need to review the information, you can click on Instructions in the top 
 <div style="text-align: center;">
 <c:choose>
 	<c:when test="${sessionScope.count > 1 && empty sessionScope.endTask}">
-		<input class="btn" name="submit" type="button" value="Back to Task" onclick="window.history.go(-1); return false;" />
+		<input id="backToTask" class="btn" name="submit" type="button" value="Back to Task"  /> <!-- onclick="window.history.go(-1); return false;" -->
 	</c:when>
 	<c:otherwise>
 		<input class="btn" name="submit" type="button" value="Proceed" onclick="location.href='overview.htm?sessionId=${sessionId}';" />

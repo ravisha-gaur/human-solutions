@@ -102,6 +102,7 @@ public class MainController {
 	    			int sessionNumber = earningDetails.getSessionNumber();
 	    			if(earningDetails.getDiffInDays() > 0 && earningDetails.getSessionStatus().equals("Incomplete")) {
 	    				model.addObject("endContract", "true");
+	    				humanSolutionsService.updateSessionStatus(userName, sessionNumber, "Missing");
 	    				endContract = true;
 	    			}
 	    			if(earningDetails.getDiffInDays() > 0 && earningDetails.getSessionStatus().equals("Pending Approval")) {
@@ -127,7 +128,7 @@ public class MainController {
 	    		if(treatmentMsgType.equalsIgnoreCase("monitoring"))
 	    			user.setTreatmentMsg(HumanSolutionsStringConstants.MONITORING_MSG);
 	    		
-	    		if(sessionNumber == 7 && !endContract) {
+	    		if(user.getEndTask() == 1 && !endContract) {
 	    			model.addObject("lastSession", "true");
 	    		}
 	    		
@@ -322,7 +323,8 @@ public class MainController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.OVERVIEW, method = RequestMethod.GET)
-	public ModelAndView overview(HttpServletRequest request, @RequestParam(value = "imageId", required = false) Integer imageId, @RequestParam(value = "sessionId") Integer sessionId){
+	public ModelAndView overview(HttpServletRequest request, @RequestParam(value = "imageId", required = false) Integer imageId, 
+			@RequestParam(value = "sessionId") Integer sessionId){
 
 		HttpSession session = request.getSession();
 		String userName = (String) session.getAttribute("username");
@@ -386,6 +388,10 @@ public class MainController {
 		
 		mav.addObject("earningsList", earningsList);
 		mav.addObject("sessionId", sessionId);
+		if(null != request.getSession().getAttribute("endTask") && request.getSession().getAttribute("endTask").equals("endTask")){
+			mav.addObject("lastImage", "true");
+			request.getSession().setAttribute("endTask", "endTask");
+		}
 		mav.addObject("finalImageIdsForSession", sessionImageIds);
 		
 		return mav;
@@ -407,11 +413,11 @@ public class MainController {
 		Collections.shuffle(hardlyReadableImageIds);
 		Collections.shuffle(unreadableImageIds);
 		if(readableImageIds.size() > 1)
-			readableImageIds = readableImageIds.subList(0, 6);
+			readableImageIds = readableImageIds.subList(0, 1);    //subList(0, 20)
 		if(hardlyReadableImageIds.size() > 1)
-			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 2);
+			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 1);   //subList(0, 5)
 		if(unreadableImageIds.size() > 1)
-			unreadableImageIds = unreadableImageIds.subList(0, 2);
+			unreadableImageIds = unreadableImageIds.subList(0, 1);    //subList(0, 5)
 		
 		
 		finalImageIdsForSession.addAll(readableImageIds);
@@ -429,7 +435,7 @@ public class MainController {
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.TRANSCRIBE_TEXTS, method = RequestMethod.GET)
 	public ModelAndView transcribeText(@RequestParam(value = "sessionId", required = false) Integer sessionId, @RequestParam(value = "imageId", required = false) 
-			Integer imageId, HttpServletRequest request) {
+			Integer imageId, HttpServletRequest request, @RequestParam(value = "backToTask", required = false) String backToTask) {
 		
 		HttpSession session = request.getSession();
 		String userName = (String) session.getAttribute("username");
@@ -441,6 +447,9 @@ public class MainController {
 		modelAndView.addObject("taskDetails", new TaskDetailsDom());
 		
 		List<Integer> sessionImageIds = humanSolutionsService.getSessionImageIds(userName, sessionId);
+		
+		if(null != backToTask)
+			modelAndView.addObject("backToTask", backToTask);
 		
 		Double progressPercent = (double) Math.round(((10-sessionImageIds.size())/10.0)*100.0);
 		modelAndView.addObject("progressPercent", progressPercent.intValue());
@@ -484,7 +493,10 @@ public class MainController {
 		}
 		else {
 			humanSolutionsService.updateSessionStatus(userName, sessionId, "Pending Approval");
-			return HumanSolutionsStringConstants.REDIRECT + HumanSolutionsURLConstants.END_TASK + "?sessionId=" + sessionId;
+			request.getSession().setAttribute("endTask", "endTask");
+			if(sessionId == 7)
+				humanSolutionsService.setTaskEndFlag(userName);
+			return HumanSolutionsStringConstants.REDIRECT + HumanSolutionsURLConstants.OVERVIEW + "?sessionId=" + sessionId;
 		}
 			
 	}
@@ -507,7 +519,7 @@ public class MainController {
 
 	  }
 
-	  // Example implementation of the Levenshtein Edit Distance
+	  // Example implementation of the Levenshtein formula
 	  public static int editDistance(String s1, String s2) {
 	    s1 = s1.toLowerCase();
 	    s2 = s2.toLowerCase();

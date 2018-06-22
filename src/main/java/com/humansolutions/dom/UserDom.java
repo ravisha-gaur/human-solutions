@@ -31,6 +31,16 @@ public class UserDom {
 	private Date startDate;
 	
 	private int id;
+	
+	private int endTask;
+
+	public int getEndTask() {
+		return endTask;
+	}
+
+	public void setEndTask(int endTask) {
+		this.endTask = endTask;
+	}
 
 	public int getId() {
 		return id;

@@ -49,11 +49,11 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		String tableName = "";
 		
-		if(imageId > 0 && imageId <= 150)
+		if(imageId >= 54601 && imageId <= 54745)
 			tableName = "readable_img_tbl";
-		if(imageId > 150 && imageId <= 200)
+		if(imageId >= 54301 && imageId <= 54345)
 			tableName = "hardly_readable_img_tbl";
-		if(imageId > 200 && imageId <= 255)
+		if(imageId >= 54885 && imageId <= 54922)
 			tableName = "unreadable_img_tbl";
 		
 		String query = "select * from " + tableName + " where image_id = ?";
@@ -113,6 +113,7 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 			user.setTreatmentMsgType(rs.getString("treatment_msg_type"));
 			user.setIsFirstLogin(rs.getInt("is_first_login"));
 			user.setStartDate(rs.getDate("start_date"));
+			user.setEndTask(rs.getInt("end_task"));
 			return user;
 		}
 		
@@ -247,15 +248,16 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		try {
 			Date loginDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
 			jdbcTemplate.update(query, new Object[]{ loginDate, treatmentMsgType, userName });
+			String insertEarningDetails = "insert into earnings values(?, ?, 0, 'Incomplete', ?)";
+			
+			for(int i = 1; i < 8; i++){
+				jdbcTemplate.update(insertEarningDetails, new Object[]{ userName, i, loginDate });
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		
-		String insertEarningDetails = "insert into earnings values(?, ?, 0, 'Incomplete', ?)";
 		
-		for(int i = 1; i < 8; i++){
-			jdbcTemplate.update(insertEarningDetails, new Object[]{ userName, i, new Date() });
-		}
 		
 	}
 
@@ -332,11 +334,11 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		String tableName = "";
 		
-		if(imageId > 0 && imageId <= 150)
+		if(imageId >= 54601 && imageId <= 54745)
 			tableName = "user_transcribed_readable_images";
-		if(imageId > 150 && imageId <= 200)
+		if(imageId >= 54301 && imageId <= 54345)
 			tableName = "user_transcribed_hardly_readable_images";
-		if(imageId > 200 && imageId <= 255)
+		if(imageId >= 54885 && imageId <= 54922)
 			tableName = "user_transcribed_unreadable_images";
 		
 		String query = "insert into " + tableName + " (username, image_id, session_id) values (?, ?, ?)";
@@ -386,22 +388,27 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		Date date = new Date();
+		/*Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.HOUR, 1);
+		if(sessionStatus.equalsIgnoreCase("Missing"))
+			calendar.add(Calendar.DATE, -1);
 	    DateFormat gmtFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	    TimeZone gmtTime = TimeZone.getTimeZone("GMT");
 	    gmtFormat.setTimeZone(gmtTime);
 	    
 	    String dateString = gmtFormat.format(calendar.getTime());
 	    
-	    String query = "update earnings set session_status = ? where username = ? and session_number = ? and date = ?";
+	    String query = "update earnings set session_status = ? where username = ? and session_number = ? and date = ?";*/
+	    
+	    String query = "update earnings set session_status = ? where username = ? and session_number = ?";
 	    
 		try {
-			Date sessionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
-			jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId, sessionDate });
-		} catch (ParseException e) {
+			//Date sessionDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(dateString);
+			jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId });
+			//jdbcTemplate.update(query, new Object[] { sessionStatus, userName, sessionId, sessionDate });
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -417,6 +424,17 @@ public class HumanSolutionsDaoImpl implements HumanSolutionsDao{
 		int count = jdbcTemplate.queryForObject(query, new Object[]{username, password}, Integer.class);
 		
 		return count;
+	}
+
+	@Override
+	public void setTaskEndFlag(String userName) {
+		
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		String query = "update user set end_task = 1 where username = ?";
+		
+		jdbcTemplate.update(query, new Object[]{ userName });
+		
 	}
 	
 }

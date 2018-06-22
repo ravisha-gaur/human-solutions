@@ -47,4 +47,6 @@ public interface HumanSolutionsDao {
 	public void updateSessionStatus(String userName, int sessionId, String sessionStatus);
 
 	public int checkLoginCredentials(String username, String password);
+
+	public void setTaskEndFlag(String userName);
 }

@@ -107,24 +107,28 @@ $(document).ready(function () {
 </div>
 <div id="login-box" style="width: 850px;">
 <p id="session1">
-Thank you for accepting to work for us!<br><br>
+Thank you for accepting to work for us!
+<br><br> 
 In the following week, you are asked to transcribe short texts which have been scanned from German documents. 
-You will be provided with a batch of XX scanned images at the beginning of each day (0:00 GMT). 
-You are asked to complete the work of each day by 20:00 GMT. We expect each session to last about one hour.
-<br><br>You will be provided with the instructions on the next screen. Please read them carefully. 
-You will be able to review the instructions at any time.
-<br><br>You will receive $35 for completing the work, i.e., $5 for each completed batch. 
-The payment will be released at the end of the week upon completing all seven days work on time. 
-It is possible that some of the images are too blurry to be readable. Reporting those as unreadable is acceptable and 
-will not affect your payment.
+You will be provided with a batch of 30 images at the beginning of each day. You are asked to complete the work of each day by 20:00 GMT. 
+We expect the work to take no longer than one hour per day.
+<br><br>
+You will be provided with the instructions on the next screen. Please read them carefully. You will be able to review the instructions at any time.
+<br><br>
+You will receive $35 for completing the work. The payment will be released at the end of the week upon completing all seven days' work on time. 
+If you do not complete a batch we will have to cancel the contract. It is possible that some of the images are too blurry to be readable. 
+Reporting those as unreadable is acceptable and will not reduce your payment.
+<br>
 </p>
 <p id="session2">
-Thank you for your work in yesterday's session. So far you have earned $ ${earnings} for your work.
-Please complete the work until 20:00 GMT.
-If you need to review the instructions, please <a href="instructions.htm?sessionId=${sessionId}">click here. </a>
+Thank you for your work yesterday. So far you have completed ${(sessionId - 1)} out of 7 batches. <br>
+Please complete today's work until 20:00 GMT.<br>
 </p>
 <p id="end_contract" style="display:none;">
-Since you did not complete your assigned tasks yesterday, we have cancelled the contract as stated in the description of the task.
+Job not available anymore. <br>
+Sorry! Since you did not complete your work yesterday, we have cancelled the contract as stated in the conditions of the job. 
+Please visit Upwork to review the conditions.
+<br>
 </p>
 <p id="last_session" style="display:none;">
 Thank you for your work. You have completed all seven batches. We will release your payment of $35 during the next day.

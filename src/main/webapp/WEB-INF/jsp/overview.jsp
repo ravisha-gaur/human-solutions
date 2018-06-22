@@ -12,7 +12,18 @@
 </head>
 <script type="text/javascript">
 $(document).ready(function(){
-	var earningsArray = new Array();
+
+	$('#backToTask').click( function () {
+		  window.location = document.referrer;
+	});
+
+	var lastImage = "${lastImage}";
+	if(lastImage == "true") {
+		$('#heading_text1').css('display','none');
+		$('#heading_text2').css('display','block');
+	}
+	
+	/* var earningsArray = new Array();
 	$('.earnings').each(function(){
 		earningsArray.push($(this).html());
 	});
@@ -20,7 +31,7 @@ $(document).ready(function(){
 	for (var i = 0; i < earningsArray.length; i++) {
 	    total += earningsArray[i] <<0;
 	}
-	$('#total').text(total);
+	$('#total').text(total); */
 });
 
 </script>
@@ -39,14 +50,15 @@ $(document).ready(function(){
 </div>
 <h1 style="margin-left: 50px;">Overview</h1>
 <div style="text-align: center; margin-left: -150px;">
-	<h3>Please click on session due today to start working on the task</h3>
+	<h3 id="heading_text1">Please click on the batch due today to start working on the task</h3>
+	<h3 id="heading_text2" style="display:none;">You will find new tasks here tomorrow at 0.00 GMT</h3>
 </div>
 <table class="overview">
 <thead>
   <tr style="height: 65px;">
-    <th style="width: 40%;">Session</th>
-    <th style="width: 30%;">Status</th> 
-    <th style="width: 40%;">Earnings ($)</th>
+    <th style="width: 50%;">Batch</th>
+    <th style="width: 50%;">Status</th> 
+    <!-- <th style="width: 40%;">Earnings ($)</th> -->
   </tr>
   </thead>
   <tbody>
@@ -55,29 +67,29 @@ $(document).ready(function(){
 	  	<tr style="height: 50px;">
 	  	<c:choose>
   		  <c:when test="${earningsDetails.diffInDays == 0 && earningsDetails.sessionStatus eq 'Incomplete'}">
-	  	  	<td><a href="transcribe_texts.htm?sessionId=${earningsDetails.sessionNumber}&imageId=${imageId}">Session ${earningsDetails.sessionNumber} 
+	  	  	<td><a href="transcribe_texts.htm?sessionId=${earningsDetails.sessionNumber}&imageId=${imageId}">Batch ${earningsDetails.sessionNumber} 
 	  	  	</a><c:if test="${not empty dueToday and dueToday eq 'dueToday'}"><sup class="supClass">Due Today</sup></c:if></td>
 	  	  </c:when>
 	  	  <c:otherwise>
-	  	  	<td>Session ${earningsDetails.sessionNumber}</td>
+	  	  	<td>Batch ${earningsDetails.sessionNumber}</td>
 	  	  </c:otherwise>
 	  	</c:choose>
 	  	<td>${earningsDetails.sessionStatus}</td>
-	  	<td class="earnings">${earningsDetails.earnings}</td>
+	  	<%-- <td class="earnings">${earningsDetails.earnings}</td> --%>
 	  	</tr>
   	</c:forEach>
 
-  <tr>
+  <!-- <tr>
   <td></td>
   <td></td>
   <td style="height:35px; text-align: left;">Total Earnings: <p style="display:inline;" id="total"></p> $</td>
-  </tr>
+  </tr> -->
   </tbody>
 </table>
 <br>
 <c:if test="${sessionScope.count > 1 && empty sessionScope.endTask}">
 	<div style="text-align: center;">
-		<input class="btn" name="submit" type="button" value="Back to Task" onclick="window.history.go(-1); return false;" style="width: 10%;"/>
+		<input class="btn" name="submit" type="button" value="Back to Task" id="backToTask" style="width: 10%;"/> <!-- onclick="window.history.go(-1); return false;" -->
 	</div>
 </c:if>
 </body>
