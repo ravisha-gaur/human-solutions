@@ -80,6 +80,23 @@ function resetZoom(){
 }
 
 $(document).ready(function () {
+
+	var radioButtonValue = localStorage.getItem("radioButtonValue");
+	var transcribedTextValue = localStorage.getItem("transcribedTextValue");
+
+	if(radioButtonValue == "yes") {
+		$('input[name=readable][value=yes]').attr('checked', true); 
+		$('#transcribeDiv').css('display', 'block');
+		if(transcribedTextValue != null)
+			$('#transcribedText').val(transcribedTextValue);
+	}
+	if(radioButtonValue == "no") {
+		$('input[name=readable][value=no]').attr('checked', true); 
+		$('#transcribedText').val("");
+	}
+
+	localStorage.removeItem("radioButtonValue");
+	localStorage.removeItem("transcribedTextValue");
 	
 	resetW = 480;
 	resetH = 670;
@@ -118,12 +135,27 @@ $(document).ready(function () {
     	        }
     	        if ($(this).is(':checked') && $(this).val() == 'no') {
     	            $('#transcribeDiv').hide();
+    	            $('#transcribedText').val("");
     	            $('#selectAnOption').hide();
     	            $('html, body').animate({scrollTop:$('#myBtn').position().top}, 'slow');
     	        }
     	    });
 	});
-	
+
+function saveInLocalStorage(locationString) {
+
+	var text = $('#transcribedText').val();
+	var selectedRadioButton = $('input[name=readable]:checked').val();
+
+	localStorage.setItem("radioButtonValue", selectedRadioButton);
+	localStorage.setItem("transcribedTextValue", text);
+
+	if(locationString == "instructions")
+		window.location.href='instructions.htm?sessionId=${sessionId}';
+	else
+		window.location.href='overview.htm?imageId=${imageId}&sessionId=${sessionId}';	
+}
+
 </script>
 <style type="text/css">
 #test {
@@ -136,8 +168,10 @@ $(document).ready(function () {
 <body>
 <div class="topnav">
 <a onclick="location.href='welcome.htm';">Welcome</a>
-<a onclick="location.href='instructions.htm?sessionId=${sessionId}';">Instructions</a>
-<a onclick="location.href='overview.htm?imageId=${imageId}&sessionId=${sessionId}';">Overview</a>
+<%-- <a onclick="location.href='instructions.htm?sessionId=${sessionId}';">Instructions</a> --%>
+<a onclick="saveInLocalStorage('instructions')">Instructions</a>
+<%-- <a onclick="location.href='overview.htm?imageId=${imageId}&sessionId=${sessionId}';">Overview</a> --%>
+<a onclick="saveInLocalStorage('overview')">Overview</a>
 <c:url value="/system_logout.htm?sessionId=${sessionId}" var="logoutUrl" />
 	<form action="${logoutUrl}" method="post" id="logoutForm">
    <a href="javascript:;" onclick="document.getElementById('logoutForm').submit();" style="float:right">Logout</a>

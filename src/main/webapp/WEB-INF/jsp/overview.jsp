@@ -15,7 +15,7 @@ $(document).ready(function(){
 
 	$('#backToTask').click( function () {
 		  window.location = document.referrer;
-	});
+		});
 
 	var lastImage = "${lastImage}";
 	if(lastImage == "true") {

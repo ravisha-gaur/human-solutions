@@ -60,7 +60,7 @@ If you need to review the information, you can click on "Instructions" in the to
 <div style="text-align: center;">
 <c:choose>
 	<c:when test="${sessionScope.count > 1 && empty sessionScope.endTask}">
-		<input id="backToTask" class="btn" name="submit" type="button" value="Back to Task"  /> <!-- onclick="window.history.go(-1); return false;" -->
+		<input id="backToTask" class="btn" name="submit" type="button" value="Back to Task" /> <!-- onclick="window.history.go(-1); return false;" -->
 	</c:when>
 	<c:otherwise>
 		<input class="btn" name="submit" type="button" value="Proceed" onclick="location.href='overview.htm?sessionId=${sessionId}';" />
