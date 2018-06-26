@@ -413,11 +413,11 @@ public class MainController {
 		Collections.shuffle(hardlyReadableImageIds);
 		Collections.shuffle(unreadableImageIds);
 		if(readableImageIds.size() > 1)
-			readableImageIds = readableImageIds.subList(0, 1);    //subList(0, 20)
+			readableImageIds = readableImageIds.subList(0, 20);    //subList(0, 20)
 		if(hardlyReadableImageIds.size() > 1)
-			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 1);   //subList(0, 5)
+			hardlyReadableImageIds = hardlyReadableImageIds.subList(0, 5);   //subList(0, 5)
 		if(unreadableImageIds.size() > 1)
-			unreadableImageIds = unreadableImageIds.subList(0, 1);    //subList(0, 5)
+			unreadableImageIds = unreadableImageIds.subList(0, 5);    //subList(0, 5)
 		
 		
 		finalImageIdsForSession.addAll(readableImageIds);
@@ -451,9 +451,9 @@ public class MainController {
 		if(null != backToTask)
 			modelAndView.addObject("backToTask", backToTask);
 		
-		Double progressPercent = (double) Math.round(((10-sessionImageIds.size())/10.0)*100.0);
+		Double progressPercent = (double) Math.round(((30-sessionImageIds.size())/30.0)*100.0);
 		modelAndView.addObject("progressPercent", progressPercent.intValue());
-		modelAndView.addObject("sessionImageIdsSize", (10-sessionImageIds.size()));
+		modelAndView.addObject("sessionImageIdsSize", (30-sessionImageIds.size()));
 		
 		modelAndView.setViewName(HumanSolutionsJSPConstants.TRANSCRIBE_TEXTS_JSP);
 		return modelAndView;
@@ -464,15 +464,16 @@ public class MainController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = HumanSolutionsURLConstants.TRANSCRIBE_TEXTS, method = RequestMethod.POST)
-	public String saveTranscribedText(HttpServletRequest request, @ModelAttribute("taskDetails") TaskDetailsDom taskDetailsDom ,@RequestParam(value = "sessionId", required = false) Integer sessionId, 
-			@RequestParam(value = "imageId", required = false) Integer imageId){
+	public String saveTranscribedText(HttpServletRequest request, @ModelAttribute("taskDetails") TaskDetailsDom taskDetailsDom ,@RequestParam(value = "sessionId", 
+		required = false) Integer sessionId, @RequestParam(value = "imageId", required = false) Integer imageId){
 		
 		HttpSession session = request.getSession();
 		String userName = (String) session.getAttribute("username");
 		
 		String solutionText = humanSolutionsService.getSolutionTranscribedText(imageId);
 		
-		double accuracyScore = similarity(solutionText, taskDetailsDom.getTranscribedText());
+		taskDetailsDom.setTranscribedText(taskDetailsDom.getTranscribedText().replace("\n", "").replace("\r", ""));
+		double accuracyScore = similarity(solutionText, taskDetailsDom.getTranscribedText().trim());
 		
 		UserDom user = new UserDom();
 		user.setUsername(userName);
@@ -514,7 +515,9 @@ public class MainController {
 	      longer = s2; shorter = s1;
 	    }
 	    int longerLength = longer.length();
-	    if (longerLength == 0) { return 1.0; /* both strings are zero length */ }
+	    if (longerLength == 0) { 
+	    	return 0.0; /* both strings are zero length */ 
+	    }
 	    return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
 
 	  }

@@ -166,7 +166,7 @@ $(document).ready(function () {
 	<div class="container" style="margin:0 auto; width:200px;">
 		  <div class="progress">
 		    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:${progressPercent}%">
-		      ${sessionImageIdsSize}/10
+		      ${sessionImageIdsSize}/30
 		    </div>
 		  </div>
 	   </div>
